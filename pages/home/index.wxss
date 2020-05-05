@@ -11,3 +11,9 @@
 .wrap {
   justify-content: space-around;
 }
+
+.menu {
+  width: 30vmin;
+  height: 30vmin;
+  line-height: 30vmin;
+}

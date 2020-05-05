@@ -17,6 +17,8 @@ Page({
   data: {
     timer: undefined,
     lastPoint: undefined,
+    currentLat: 0,
+    currentLng: 0,
     longitude: 0,
     latitude: 0,
     scale: 16,
@@ -30,7 +32,7 @@ Page({
       subKey: '',
       layerStyle: -1,
       enableZoom: false,
-      enableScroll: false,
+      enableScroll: true,
       enableRotate: false,
       showCompass: false,
       enable3D: false,
@@ -46,12 +48,8 @@ Page({
       map: wx.createMapContext('myMap')
     })
     const timer = setInterval(() => {
-      that.data.map.moveToLocation({
-        fail(res) {
-          console.log('fail', res)
-        }
-      })
-    }, 15000)
+      that.updateCurrent()
+    }, 10000)
     this.setData({
       timer
     })
@@ -75,6 +73,10 @@ Page({
       success(res) {
         that.data.map.moveToLocation()
         // that.getEvents()
+        that.setData({
+          currentLat: res.latitude,
+          currentLng: res.longitude
+        })
       },
       fail() {
         wx.showModal({
@@ -125,7 +127,9 @@ Page({
           longitude.unshift(res.northeast.longitude)
         else 
           longitude.push(res.northeast.longitude)
-        
+        const enableTitle = 
+          (that.data.currentLat < latitude[1] && that.data.currentLat > latitude[0]) && (that.data.currentLng < longitude[1] && that.data.currentLng > longitude[0])
+        console.log(this.data.currentLat, this.data.currentLng)
         wx.request({
           url: `${app.globalData.site}/post/lbs`,
           data: {
@@ -137,11 +141,50 @@ Page({
           success(res) {
             that.setData({
               markers: [...res.data.data.map(item => ({
-                title: item.code,
+                title: enableTitle ? item.code : '请移动到该动态附近再试哦~',
                 latitude: item.lat,
                 longitude: item.lng
               }))]
             })
+          }
+        })
+      }
+    })
+  },
+  updateCurrent() {
+    const that = this
+    wx.getLocation({
+      type: 'gcj02',
+      success(res) {
+        const {latitude, longitude} = res
+
+        that.setData({
+          currentLat: latitude,
+          currentLng: longitude
+        })
+        // that.getEvents()
+      },
+      fail() {
+        wx.showModal({
+          title: '定位失败',
+          content: '请重新授权位置权限，以提供服务',
+          success: function (res) {
+            if (res.confirm) {
+              wx.openSetting({
+                success(res) {
+                  that.init()
+                  // res.authSetting = {
+                  //   "scope.userInfo": true,
+                  //   "scope.userLocation": true
+                  // }
+                }
+              })
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+              wx.navigateBack({
+                delta: 0
+              })
+            }
           }
         })
       }

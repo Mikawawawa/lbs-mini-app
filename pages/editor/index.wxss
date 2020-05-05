@@ -14,3 +14,8 @@
   display: flex;
   justify-content: space-between;
 }
+
+.submit-btn {
+  width: 100vw;
+  border-radius: 0;
+}

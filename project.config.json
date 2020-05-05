@@ -61,6 +61,13 @@
 					"id": -1,
 					"name": "pages/privilege/index",
 					"pathName": "pages/privilege/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/editor/index",
+					"pathName": "pages/editor/index",
 					"scene": null
 				}
 			]
