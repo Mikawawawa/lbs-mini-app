@@ -1,0 +1,4 @@
+<!--index.wxml-->
+<view class="container">
+	<map class='map' id='myMap' longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" show-location="true" markers="{{markers}}" bindregionchange="bindregionchange" setting="{{setting}}"/>
+</view>

@@ -1,0 +1,16 @@
+/**index.wxss**/
+.editor {
+  height: 40vh;
+  width: 90vw;
+}
+
+.picker {
+  height: 40vh;
+  width: 90vw;
+}
+
+.container-around {
+  min-height: 100vh;
+  display: flex;
+  justify-content: space-between;
+}

@@ -1,0 +1,18 @@
+.title {
+  font-size: larger;
+  align-items: flex-start;
+  font-weight: bolder;
+}
+
+.items {
+  margin-top: 48rpx;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: 100%;
+}
+
+.desc {
+  font-size: smaller;
+  color: #555;
+}

@@ -1,0 +1,23 @@
+<!--index.wxml-->
+<view class="container" style="align-items: flex-start;margin: 48rpx">
+	<text class="title">授权提示</text>
+	<text class="desc">
+		为了正常使用LBS动态功能，请授权以下信息，谢谢
+	</text>
+	<view class="items">
+		<text style="padding: 0px">请授权用户信息</text>
+		<button wx:if="{{hasUserInfo === false}}" style="padding: 0px" open-type="getUserInfo" bindgetuserinfo="getUserInfo" style="display: inline-block">
+			授权
+		</button>
+		<button wx:else disabled="true">已授权</button>
+	</view>
+
+	<view class="items">
+		<text style="padding: 0px">请授权位置信息</text>
+		<button wx:if="{{hasLocation === false}}" style="padding: 0px" bindtap="authLocation" style="display: inline-block">
+			授权
+		</button>
+		<button wx:else disabled="true">已授权</button>
+	</view>
+	<button style="margin-top: 64rpx" disabled="{{!(hasLocation && hasUserInfo)}}" bindtap="goback">返回</button>
+</view>

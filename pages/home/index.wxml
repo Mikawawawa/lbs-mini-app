@@ -1,0 +1,6 @@
+<!--index.wxml-->
+<view class="container bg wrap">
+	<button bindtap="goEditor">发动态</button>
+	<button bindtap="goGalance">发现</button>
+	<button bindtap="goMe">我</button>
+</view>
