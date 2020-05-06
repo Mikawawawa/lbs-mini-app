@@ -38,8 +38,9 @@ App({
                       avatar: avatarUrl
                     },
                     success: function (res) {
-                      console.info('请求成功')
-                      that.globalData.key = res.data
+                      // console.info('请求成功')
+                      that.globalData.key = res.data.token
+                      that.globalData.idnumber = res.data.idnumber
                     }
                   })
                 }

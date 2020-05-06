@@ -84,9 +84,8 @@ Page({
                 avatar: avatarUrl
               },
               success: function (res) {
-                console.info('请求成功')
-                app.globalData.key = res.data
-                
+                that.globalData.key = res.data.token
+                that.globalData.idnumber = res.data.idnumber
               }
             })
           }

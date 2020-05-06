@@ -17,6 +17,9 @@ Page({
   },
   onLoad: function () {
     const that = this
+    this.setData({
+      idnumber: app.globalData.idnumber
+    })
     if (app.globalData.userInfo) {
       console.log(app.globalData.userInfo)
       this.setData({
