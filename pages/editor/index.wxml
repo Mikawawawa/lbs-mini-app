@@ -5,6 +5,11 @@
 			class="editor"
 			bindinput="bindFormSubmit"
 			placeholder="说些什么吧..."/>
+		<picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+    <view class="type-picker">
+      类型选择：{{array[index]}}
+    </view>
+  </picker>
 		<mp-uploader
 			class="picker"
 			bindfail="uploadError"

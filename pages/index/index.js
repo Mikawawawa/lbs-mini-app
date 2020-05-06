@@ -21,7 +21,7 @@ Page({
     currentLng: 0,
     longitude: 0,
     latitude: 0,
-    scale: 16,
+    scale: 17,
     markers: [],
     map: {},
     setting: {
@@ -111,6 +111,14 @@ Page({
     if(e.type === 'begin') return
     this.getEvents()
   },
+  bindmarkertap: function (e) {
+    setTimeout(() => {
+      wx.setClipboardData({
+        data: e.detail.markerId
+      })
+    }, 500)
+
+  },
   getEvents: function() {
     const that = this
     this.data.map.getRegion({
@@ -141,7 +149,8 @@ Page({
           success(res) {
             that.setData({
               markers: [...res.data.data.map(item => ({
-                title: enableTitle ? item.code : '请移动到该动态附近再试哦~',
+                id: item.code,
+                title: enableTitle ? `提取码：${item.code}\n点击复制` : '请移动到该动态附近再试哦~',
                 latitude: item.lat,
                 longitude: item.lng
               }))]

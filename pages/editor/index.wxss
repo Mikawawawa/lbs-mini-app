@@ -1,12 +1,16 @@
 /**index.wxss**/
 .editor {
-  height: 40vh;
+  height: 35vh;
   width: 90vw;
 }
 
 .picker {
-  height: 40vh;
+  height: 10vh;
   width: 90vw;
+}
+
+.type-picker {
+  margin-bottom: 5vh;
 }
 
 .container-around {

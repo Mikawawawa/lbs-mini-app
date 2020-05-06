@@ -8,6 +8,8 @@ Page({
     files: [],
     successFiles: [],
     uplaodFile: undefined,
+    array: ['地图', '随机', '定向'],
+    index: 0,
   },
   onLoad() {
     this.setData({
@@ -137,5 +139,11 @@ Page({
       }
     })
     // console.log(this.data)
-  }
+  },
+  bindPickerChange: function(e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      index: e.detail.value
+    })
+  },
 });
