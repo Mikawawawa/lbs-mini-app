@@ -9,13 +9,66 @@ Page({
     successFiles: [],
     uplaodFile: undefined,
     array: ['地图', '随机', '定向'],
-    index: 0,
+    index: '2',
+    userInputValue: '',
+    targetUser: undefined,
+    hasUser: false
   },
   onLoad() {
     this.setData({
       uplaodFile: this.uplaodFile.bind(this)
+
     })
   },
+
+  bindKeyInput: function (e) {
+    this.setData({
+      userInputValue: e.detail.value
+    })
+  },
+  resetTarget: function() {
+    this.setData({
+      targetUser: undefined,
+      hasUser: false
+    })
+    console.log(this.data)
+  },
+  checkTarget: function() {
+    const that = this
+    wx.request({
+      url: `${app.globalData.site}/user/check`,
+      method: "GET",
+      data: {
+        number: that.data.userInputValue
+      },
+      success(res) {
+        try {
+          if(res.data.success === false && res.data.data === null) {
+            wx.showToast({
+              title: '用户不存在',
+              success: false
+            })
+            return
+          } else {
+            that.setData({
+              hasUser: true,
+              targetUser: {
+                key: res.data.data.token,
+                avatar: res.data.data.avatar,
+                nickname: res.data.data.nickname.length <= 1 ? res.data.data.nickname + "**" : `${res.data.data.nickname.slice(0, 1)}***${res.data.data.nickname.slice(-1)}`
+              }
+            })
+          }  
+        } catch (error) {
+          wx.showToast({
+            title: '用户不存在',
+            success: false
+          })
+        }
+      },
+    })
+  },
+
   chooseImage: function (e) {
     var that = this;
     wx.chooseImage({
@@ -94,11 +147,13 @@ Page({
           url: `${app.globalData.site}/post/write`,
           method: "POST",
           data: {
+            secret: that.data.index === '2' ? true:false,
             raw: that.data.content,
             key: app.globalData.key,
             lat: latitude,
             lng: longitude,
-            images: that.data.successFiles
+            images: that.data.successFiles,
+            targetUser: that.data.targetUser
           },
           success() {
             wx.showToast({
@@ -141,7 +196,6 @@ Page({
     // console.log(this.data)
   },
   bindPickerChange: function(e) {
-    console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
       index: e.detail.value
     })

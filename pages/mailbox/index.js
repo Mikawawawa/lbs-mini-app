@@ -4,6 +4,8 @@ const app = getApp()
 
 Page({
   data: {
+    index: 0,
+    range: ['全体', '可提取', '已提取'],
     activities: [],
     userInfo: {},
     hasUserInfo: false,
@@ -51,10 +53,13 @@ Page({
   onShow: function() {
     this.getActivity()
   },
-  goMailBox: function(e) {
-    wx.navigateTo({
-      url: '../mailbox/index'
+  bindPickerChange: function(e) {
+    console.log(e)
+    this.setData({
+      ...this.data,
+      index: e.detail.value
     })
+    this.getActivity()
   },
   getUserInfo: function(e) {
     app.globalData.userInfo = e.detail.userInfo
@@ -66,10 +71,11 @@ Page({
   },
   deleIt: function(e) {
     const that = this
+    console.log(e)
     wx.request({
-      url: `${app.globalData.site}/post/dele`,
+      url: `${app.globalData.site}/mailbox/dele`,
       data: {
-        code: e.target.dataset.code
+        id: e.target.dataset.code
       },
       method: "POST",
       success(res) {
@@ -80,19 +86,22 @@ Page({
   getActivity: function(e) {
     const that = this
     wx.request({
-      url: `${app.globalData.site}/post/all`,
+      url: `${app.globalData.site}/mailbox/list`,
       method: "GET",
       data: {
-        key: app.globalData.key
+        key: app.globalData.key,
+        type: that.data.index,
       },
       success(res) {
         if(res.data.success) {
           that.setData({
             activities: res.data.data.map(item => ({
-              createAt: new Date(item.createdAt).toLocaleString(),
-              code: item.code,
-              images: JSON.parse(item.images),
-              content: item.raw
+              id: item.box.id,
+              createAt: new Date(item.box.createdAt).toLocaleString(),
+              code: item.article.code,
+              images: JSON.parse(item.article.images),
+              content: item.article.raw,
+              picked: item.box.picked
             }))
           })
           console.log(res.data.data)

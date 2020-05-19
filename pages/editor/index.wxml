@@ -10,6 +10,19 @@
       类型选择：{{array[index]}}
     </view>
   </picker>
+
+		<view class="user-picker" wx:if="{{index === '2'}}">
+			<block wx:if="{{hasUser === false}}">	
+				<input class="user-input"  maxlength="10"  bindinput="bindKeyInput" placeholder="输入用户数字账号"/>
+				<button size="mini" plain="true" bindtap="checkTarget">确认</button>
+			</block>
+			<block wx:else>
+				<text>定向用户：</text>
+				<image mode="aspectFill" class="avatar" src="{{targetUser.avatar}}"></image>
+				<text>{{targetUser.nickname}}</text>
+				<button size="mini" plain="true" bindtap="resetTarget">重置</button>
+			</block>
+		</view>
 		<mp-uploader
 			class="picker"
 			bindfail="uploadError"

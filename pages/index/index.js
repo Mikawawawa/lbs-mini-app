@@ -15,6 +15,7 @@ function throttle(fn, gapTime = 1000) {
 
 Page({
   data: {
+    enableTable: {},
     timer: undefined,
     lastPoint: undefined,
     currentLat: 0,
@@ -47,13 +48,8 @@ Page({
     this.setData({
       map: wx.createMapContext('myMap')
     })
-    const timer = setInterval(() => {
-      that.updateCurrent()
-    }, 10000)
-    this.setData({
-      timer
-    })
-    this.init()
+
+    // this.init()
   },
   onHide: function() {
     console.log('hide')
@@ -62,62 +58,41 @@ Page({
     }
   },
   onShow: function() {
-    this.init()
-    
+    const that = this
+    const timer = setInterval(() => {
+      that.updateCurrent()
+    }, 10000)
+    this.setData({
+      timer
+    })
+    this.init()    
   },
   init: function () {
     const that = this
-    
-    wx.getLocation({
-      type: 'wgs84',
-      success(res) {
-        that.data.map.moveToLocation()
-        // that.getEvents()
-        that.setData({
-          currentLat: res.latitude,
-          currentLng: res.longitude
-        })
-      },
-      fail() {
-        wx.showModal({
-          title: '定位失败',
-          content: '请重新授权位置权限，以提供服务',
-          success: function (res) {
-            if (res.confirm) {
-              wx.openSetting({
-                success(res) {
-                  that.init()
-                  // res.authSetting = {
-                  //   "scope.userInfo": true,
-                  //   "scope.userLocation": true
-                  // }
-                }
-              })
-            } else if (res.cancel) {
-              console.log('用户点击取消')
-              wx.navigateBack({
-                delta: 0
-              })
-            }
-          }
-        })
-      }
-    })
-  },
-  getArea: function () {
-    console.log(this)
+    this.data.map.moveToLocation()
+    this.updateCurrent()
   },
   bindregionchange: function (e) {
     if(e.type === 'begin') return
     this.getEvents()
   },
   bindmarkertap: function (e) {
-    setTimeout(() => {
-      wx.setClipboardData({
-        data: e.detail.markerId
+    if(app.globalData.accessable && this.data.enableTable[e.detail.markerId]) {
+      setTimeout(() => {
+        wx.setClipboardData({
+          data: e.detail.markerId
+        })
+      }, 500)
+      console.log(e)
+      wx.request({
+        url: `${app.globalData.site}/mailbox/add`,
+        data: {
+          msgId: e.markerId,
+          key: app.globalData.key
+        },
+        method: "POST"
       })
-    }, 500)
-
+    }
   },
   getEvents: function() {
     const that = this
@@ -137,7 +112,7 @@ Page({
           longitude.push(res.northeast.longitude)
         const enableTitle = 
           (that.data.currentLat < latitude[1] && that.data.currentLat > latitude[0]) && (that.data.currentLng < longitude[1] && that.data.currentLng > longitude[0])
-        console.log(this.data.currentLat, this.data.currentLng)
+        // console.log(this.data.currentLat, this.data.currentLng)
         wx.request({
           url: `${app.globalData.site}/post/lbs`,
           data: {
@@ -147,13 +122,20 @@ Page({
           },
           method: "GET",
           success(res) {
+            const enableTable = {}
+            const _markers = [...res.data.data.map(item => {
+              enableTable[item.code] = enableTitle
+              return {
+                  id: item.code,
+                  title: enableTitle && app.globalData.accessable ? `点击复制提取码：\n${item.code}` : '请移动到该动态附近再试哦~',
+                  latitude: item.lat,
+                  longitude: item.lng,
+                  enable: enableTitle
+              }
+            })]
             that.setData({
-              markers: [...res.data.data.map(item => ({
-                id: item.code,
-                title: enableTitle ? `提取码：${item.code}\n点击复制` : '请移动到该动态附近再试哦~',
-                latitude: item.lat,
-                longitude: item.lng
-              }))]
+              markers: _markers,
+              enableTable: {...that.data.enableTable, ...enableTable}
             })
           }
         })

@@ -4,7 +4,8 @@
     "pages/index/index",
     "pages/me/index",
     "pages/editor/index",
-    "pages/privilege/index"
+    "pages/privilege/index",
+    "pages/mailbox/index"
   ],
   "permission": {
     "scope.userLocation": {

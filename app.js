@@ -29,20 +29,34 @@ App({
                   console.info(userInfo)
                   let {nickName, avatarUrl} = userInfo
                   //调用后端登录接口
-                  wx.request({
-                    method: 'POST',
-                    url: `${that.globalData.site}/wechat/login`,
-                    data: {
-                      code: code,
-                      nickName: nickName,
-                      avatar: avatarUrl
-                    },
-                    success: function (res) {
-                      // console.info('请求成功')
-                      that.globalData.key = res.data.token
-                      that.globalData.idnumber = res.data.idnumber
-                    }
-                  })
+                  wx.getLocation({
+                    type: 'gcj02',
+                    success(res) {
+                      const {latitude, longitude} = res
+                      wx.request({
+                        method: 'POST',
+                        url: `${that.globalData.site}/wechat/login`,
+                        data: {
+                          code: code,
+                          nickName: nickName,
+                          avatar: avatarUrl,
+                          lat: latitude,
+                          lng: longitude
+                        },
+                        success: function (res) {
+                          // console.info('请求成功')
+                          that.globalData.key = res.data.token
+                          that.globalData.idnumber = res.data.idnumber
+                          that.globalData.accessable = res.data.accessable || false
+                          if(!that.globalData.accessable) {
+                            wx.showToast({
+                              title: '哎呀呀，不在服务区域哦',
+                            })
+                          }
+                        }
+                      })
+                      // that.getEvents()
+                    }})
                 }
               })
             } else {
@@ -63,6 +77,8 @@ App({
   globalData: {
     userInfo: null,
     key: '',
-    site: 'http://129.204.241.109:8080'
+    site: 'http://129.204.241.109:8080',
+    // site: 'http://localhost:8080',
+    accessable: false
   }
 })

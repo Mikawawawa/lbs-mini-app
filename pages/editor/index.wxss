@@ -10,7 +10,7 @@
 }
 
 .type-picker {
-  margin-bottom: 5vh;
+  margin-bottom: 18rpx;
 }
 
 .container-around {
@@ -22,4 +22,19 @@
 .submit-btn {
   width: 100vw;
   border-radius: 0;
+}
+
+.user-picker {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 90vw;
+}
+.user-input {
+  flex: 1
+}
+
+.avatar {
+  width: 90rpx;
+  height: 90rpx;
 }

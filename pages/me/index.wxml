@@ -8,9 +8,14 @@
 			<text class="userinfo-nickname">用户码：{{idnumber}}</text>
 		</block>
 	</view>
+	<view class="mailbox" bindtap="goMailBox">
+		<text class="activity-title">我的收件箱</text>
+		<text>></text>
+	</view>
+
 	<view class="activities" wx:if="{{activities && activities.length > 0}}">
 		<text class="activity-title">我的动态</text>
-		<view wx:for="{{activities}}" wx:key="id" class="activity">
+			<view wx:for="{{activities}}" wx:key="id" class="activity">
 			<view class="activity-header">
 				<view style="display: flex; flex-direction: column">
 					<text>{{item.createAt}}</text>

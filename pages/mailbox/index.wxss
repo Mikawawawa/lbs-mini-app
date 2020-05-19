@@ -1,4 +1,8 @@
 /**index.wxss**/
+.main {
+  min-height: 100vh;
+}
+
 .userinfo {
   display: flex;
   flex-direction: column;
@@ -24,6 +28,7 @@
   width: calc(100vw - 48rpx);
   margin-bottom: 48rpx;
   margin-top: 32rpx;
+  flex: 1;
 }
 
 .activity {
@@ -61,4 +66,19 @@
   justify-content: space-between;
   width: calc(100vw - 48rpx);
   margin-top: 32rpx;
+}
+
+.empty {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.picked {
+  color: red
+}
+
+.topick {
+  color: darkcyan
 }
