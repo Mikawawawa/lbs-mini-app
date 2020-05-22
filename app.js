@@ -50,7 +50,7 @@ App({
                           that.globalData.accessable = res.data.accessable || false
                           if(!that.globalData.accessable) {
                             wx.showToast({
-                              title: '哎呀呀，不在服务区域哦',
+                              title: '哎呀呀,不在服务区域哦',
                             })
                           }
                         }
