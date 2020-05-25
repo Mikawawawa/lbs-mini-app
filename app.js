@@ -77,7 +77,8 @@ App({
   globalData: {
     userInfo: null,
     key: '',
-    site: 'http://129.204.241.109:8080',
+    site: 'https://wechat.theohan.club',
+    // site: 'http://129.204.241.109:8080',
     // site: 'http://localhost:8080',
     accessable: false
   }
