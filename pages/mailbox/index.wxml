@@ -27,8 +27,8 @@
 					<image src="{{imagesrc}}" class="activity-image"></image>
 				</block>
 			</view>
-			<view class="activity-header" style="margin-top: 24rpx" wx:if="{{item.picked === false}}">
-				<text>提取码：{{item.code}}</text>
+			<view class="activity-header" style="margin-top: 24rpx">
+				<text wx:if="{{item.picked === false}}">提取码：{{item.code}}</text>
 				<text wx:if="{{item.picked === true}}" class="picked">已提取</text>
 				<text class="topick" wx:if="{{item.picked === false}}">可提取</text>
 			</view>

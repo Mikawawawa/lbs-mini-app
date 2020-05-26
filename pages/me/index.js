@@ -16,6 +16,18 @@ Page({
     })
   },
   onLoad: function () {
+    
+  },
+  onShow: function() {
+    this.init()
+    this.getActivity()
+  },
+  goMailBox: function(e) {
+    wx.navigateTo({
+      url: '../mailbox/index'
+    })
+  },
+  init: function() {
     const that = this
     this.setData({
       idnumber: app.globalData.idnumber
@@ -47,14 +59,6 @@ Page({
         }
       })
     }
-  },
-  onShow: function() {
-    this.getActivity()
-  },
-  goMailBox: function(e) {
-    wx.navigateTo({
-      url: '../mailbox/index'
-    })
   },
   getUserInfo: function(e) {
     app.globalData.userInfo = e.detail.userInfo

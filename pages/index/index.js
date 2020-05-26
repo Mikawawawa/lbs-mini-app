@@ -52,13 +52,13 @@ Page({
     // this.init()
   },
   onHide: function() {
-    console.log('hide')
     if(this.data.timer) {
       clearInterval(this.data.timer)
     }
   },
   onShow: function() {
     const that = this
+    this.updateCurrent()
     const timer = setInterval(() => {
       that.updateCurrent()
     }, 10000)
