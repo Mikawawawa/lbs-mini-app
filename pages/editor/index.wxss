@@ -4,6 +4,11 @@
   width: 90vw;
 }
 
+.subject-input {
+  width: 90vw;
+  height: 10vh;
+}
+
 .picker {
   height: 10vh;
   width: 90vw;
@@ -22,6 +27,9 @@
 .submit-btn {
   width: 100vw;
   border-radius: 0;
+  background-color: burlywood;
+  color: white;
+  padding: 0
 }
 
 .user-picker {
@@ -37,4 +45,62 @@
 .avatar {
   width: 90rpx;
   height: 90rpx;
+}
+
+.custom-submit {
+  width: 100%;
+  background-color: burlywood;
+  color: white;
+}
+
+.recorder {
+  margin-top: 3vh;
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.recorder-start {
+  background-color: burlywood;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 150rpx;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.recorder-stop {
+  background-color: rgb(216, 53, 53) !important;
+}
+
+.recorder image{
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.recorder-previewer {
+  height: 100rpx;
+  width: 100%;
+  background-color: burlywood;
+  border-radius: 10rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.recorder-previewer-info {
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 30rpx;
+}
+
+.recorder-previewer text,
+.recorder-previewer image{
+  margin: 10rpx;
 }

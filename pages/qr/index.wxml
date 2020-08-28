@@ -1,0 +1,16 @@
+<!--index.wxml-->
+<view class="container" style="background: #eee; display: flex; justify-content: center; align-item: center">
+	<view class="userinfo">
+		<image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+		<view class="userDesc">
+			<text class="userinfo-nickname">{{userInfo.nickName}}</text>
+			<text class="userinfo-nickname">用户码：{{idnumber}}</text>
+		</view>
+	</view>
+
+	<view class="qrcode">
+		<canvas style="width: 200px; height: 200px;" canvas-id="myQrcode"></canvas>
+	</view>
+
+
+</view>

@@ -6,10 +6,15 @@ Page({
   data: {
     content: "",
     files: [],
+    recorderDuration: 12,
+    recorderManager: null,
+    recording: false,
+    recordPath: null,
     successFiles: [],
     uplaodFile: undefined,
     array: ['地图', '随机', '定向'],
-    index: '2',
+    typeArray: ['NORMAL', 'RANDOM', 'AIM'],
+    index: '0',
     userInputValue: '',
     targetUser: undefined,
     hasUser: false
@@ -96,7 +101,8 @@ Page({
       wx.uploadFile({
         url: `${app.globalData.site}/upload`,
         filePath: tempFilePaths,
-        name: 'images',
+        name: 'files',
+        timeout:30000,
         header: {
           'content-type': 'multipart/form-data'
         },
@@ -111,7 +117,8 @@ Page({
           }
 
         },
-        fial: () => {
+        fial: (error) => {
+          console.log(error)
           reject('error')
         }
       })
@@ -131,6 +138,99 @@ Page({
       ]
     })
   },
+  recordStart() {
+    const that = this
+
+    let recorderManager
+    if(this.data.recorderManager === null) {
+      recorderManager = wx.getRecorderManager()
+      this.setData({
+        recorderManager,
+        recording: true
+      })
+    } else {
+      recorderManager = this.data.recorderManager
+      this.setData({
+        recording: true
+      })
+    }
+
+    recorderManager.start({
+      duration: 1000 * 30,
+      format: 'mp3'
+    })
+
+    recorderManager.onStop(function({tempFilePath, duration}) {
+      if(duration < 2000) {
+        wx.showToast({
+          title: '录音时间小于2秒，请重试',
+          image: '../../assets/warning.png'
+        })
+        return 
+      }
+      that.setData({
+        recorderDuration: (duration / 1000).toFixed(2)
+      })
+      wx.uploadFile({
+        url: `${app.globalData.site}/upload`,
+        filePath: tempFilePath,
+        name: 'files',
+        timeout:30000,
+        header: {
+          'Content-Type': 'multipart/form-data'
+        },
+        success: (res) => {
+          const data = JSON.parse(res.data)
+          console.log(data)
+          try {
+            let url = data.url
+            // 格式： {urls: ["后端返回的图片地址"]}
+            that.setData({
+              recordPath: url
+            })
+          } catch (error) {
+            console.log(error)
+            wx.showToast({
+              title: '上传失败，请稍后再试',
+            })
+          }
+
+        },
+        fial: (error) => {
+          console.log(error)
+        }
+      })
+    })
+  },
+  recordStop() {
+    this.data.recorderManager.stop()
+    this.setData({
+      recording: false
+    })
+  },
+  recordPlay() {
+    const innerAudioContext = wx.createInnerAudioContext()
+    innerAudioContext.autoplay = true
+    innerAudioContext.src = this.data.recordPath
+    innerAudioContext.onPlay(() => {
+      console.log('开始播放')
+    })
+    innerAudioContext.onError((res) => {
+      console.log(res.errMsg)
+      console.log(res.errCode)
+    })
+  },
+  recordCancel() {
+    this.setData({
+      recordPath: null,
+      recording: false,
+    })
+  },
+  bindSubject(e) {
+    this.setData({
+      subject: String(e.detail.value)
+    })
+  },
   bindFormSubmit(e) {
     this.setData({
       content: String(e.detail.value)
@@ -142,6 +242,7 @@ Page({
     wx.getLocation({
       type: 'gcj02',
       success(res) {
+        console.log(that.data.typeArray[parseInt(that.data.index)])
         const {latitude, longitude} = res
         wx.request({
           url: `${app.globalData.site}/post/write`,
@@ -152,8 +253,11 @@ Page({
             key: app.globalData.key,
             lat: latitude,
             lng: longitude,
+            type: that.data.typeArray[parseInt(that.data.index)],
+            subject: that.data.subject,
             images: that.data.successFiles,
-            targetUser: that.data.targetUser
+            targetUser: that.data.targetUser,
+            audio: that.data.recordPath
           },
           success() {
             wx.showToast({

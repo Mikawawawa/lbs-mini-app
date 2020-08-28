@@ -1,21 +1,45 @@
 <!--index.wxml-->
-<view class="container">
+<view class="container" style="background-color: #eeeeee">
 	<view class="userinfo">
 		<button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
 		<block wx:else>
 			<image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-			<text class="userinfo-nickname">{{userInfo.nickName}}</text>
-			<text class="userinfo-nickname">用户码：{{idnumber}}</text>
+			<view class="userDesc">
+				<text class="userinfo-nickname">{{userInfo.nickName}}</text>
+				<text class="userinfo-nickname">用户码：{{idnumber}}</text>
+			</view>
 		</block>
 	</view>
-	<view class="mailbox" bindtap="goMailBox">
+
+	<view class="actions">
+		<view class="action" bindtap="goMailBox">
+			<div class="action-title">
+				<image src="../../assets/mailbox.png" class="icon"></image>
+				<text class="activity-title">收件箱</text>
+			</div>
+
+			<text>></text>
+		</view>
+		<view class="action">
+			<div class="action-title" bindtap="goActivity">
+				<image src="../../assets/activity.png" class="icon"></image>
+				<text class="activity-title">我的动态</text>
+			</div>
+			<text>></text>
+		</view>
+	</view>
+
+	<view class="footer">
+		新罗马的贺年片
+	</view>
+	<!-- <view class="mailbox" bindtap="goMailBox">
 		<text class="activity-title">我的收件箱</text>
 		<text>></text>
 	</view>
 
 	<view class="activities" wx:if="{{activities && activities.length > 0}}">
 		<text class="activity-title">我的动态</text>
-			<view wx:for="{{activities}}" wx:key="id" class="activity">
+		<view wx:for="{{activities}}" wx:key="id" class="activity">
 			<view class="activity-header">
 				<view style="display: flex; flex-direction: column">
 					<text>{{item.createAt}}</text>
@@ -29,7 +53,7 @@
 			</view>
 			<view class="activity-images" wx:if="{{item.images && item.images.length > 0}}">
 				<block wx:for="{{item.images}}" wx:for-item="imagesrc" wx:key="*this">
-					<image src="{{imagesrc}}" class="activity-image"></image>
+					<image src="{{imagesrc}}" class="activity-image" mode="aspectFit"></image>
 				</block>
 			</view>
 			<view class="activity-header" style="margin-top: 24rpx">
@@ -37,4 +61,7 @@
 			</view>
 		</view>
 	</view>
+	<view class="empty" wx:else>
+		<text>空空如也呢</text>
+	</view> -->
 </view>

@@ -1,4 +1,14 @@
 <!--index.wxml-->
 <view class="container">
-	<map class='map' id='myMap' longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" show-location="true" markers="{{markers}}" bindregionchange="bindregionchange" setting="{{setting}}" bindmarkertap="bindmarkertap"/>
+	<map class='map' id='myMap' longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" show-location="true" markers="{{markers}}" enable-scroll="true" bindregionchange="bindregionchange" setting="{{setting}}" bindmarkertap="bindmarkertap">
+	</map>
+	<view class="control-btn me-btn" bindtap="goMe">
+		<image src="../../assets/me.png" class="me-btn-content"></image>
+	</view>
+	<view class="control-btn refresh-btn" bindtap="refresh">
+		<image src="../../assets/refresh.png" class="me-btn-content"></image>
+	</view>
+	<view class="editor-btn" bindtap="goEditor">
+		去写信
+	</view>
 </view>

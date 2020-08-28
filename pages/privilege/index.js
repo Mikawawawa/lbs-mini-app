@@ -11,7 +11,8 @@ Page({
     canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
   onUnload() {
-    this.login()
+    // this.login()
+    app.login()
   },
   onLoad() {
     const that = this

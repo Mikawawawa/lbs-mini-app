@@ -3,14 +3,14 @@
 	<text class="activity-title">我的收件箱</text>
 
 	<picker bindchange="bindPickerChange" value="{{index}}" range="{{range}}">
-    <view class="picker">
-      当前选择：{{range[index]}}
-    </view>
-  </picker>
+		<view class="picker">
+			当前选择：{{range[index]}}
+		</view>
+	</picker>
 
 	<view class="activities" wx:if="{{activities && activities.length > 0}}">
 
-			<view wx:for="{{activities}}" wx:key="id" class="activity">
+		<view wx:for="{{activities}}" wx:key="id" class="activity" bindtap="goQr" data-code="{{item.picked === true ? '-1' : item.code}}">
 			<view class="activity-header">
 				<view style="display: flex; flex-direction: column">
 					<text>{{item.createAt}}</text>
@@ -20,17 +20,16 @@
 				</view>
 			</view>
 			<view class="activity-content">
-				<text>{{item.content}}</text>
+				<text>{{item.subject}}</text>
+				<!-- <text>{{item.content}}</text> -->
 			</view>
-			<view class="activity-images" wx:if="{{item.images && item.images.length > 0}}">
-				<block wx:for="{{item.images}}" wx:for-item="imagesrc" wx:key="*this">
-					<image src="{{imagesrc}}" class="activity-image"></image>
-				</block>
+			<view class="activity-images">
+				<image src="{{item.images}}" class="activity-image" mode="aspectFit"></image>
 			</view>
 			<view class="activity-header" style="margin-top: 24rpx">
-				<text wx:if="{{item.picked === false}}">提取码：{{item.code}}</text>
+				<text wx:if="{{item.picked === false}}">提取次数：{{item.current}} / {{item.total}}</text>
 				<text wx:if="{{item.picked === true}}" class="picked">已提取</text>
-				<text class="topick" wx:if="{{item.picked === false}}">可提取</text>
+				<text class="topick" wx:if="{{item.picked === false}}">去提取</text>
 			</view>
 		</view>
 	</view>

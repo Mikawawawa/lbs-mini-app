@@ -1,15 +1,15 @@
 <!--index.wxml-->
 <view class="container container-around">
 	<view>
-		<textarea
-			class="editor"
-			bindinput="bindFormSubmit"
-			placeholder="说些什么吧..."/>
+		<textarea class="editor" bindinput="bindFormSubmit" placeholder="说些什么吧..." />
+
+		<input bindinput="bindSubject" placeholder="填写主题，默认为消息内容前15个字噢" class="subject-input"/>
+		
 		<picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
-    <view class="type-picker">
-      类型选择：{{array[index]}}
-    </view>
-  </picker>
+			<view class="type-picker">
+				类型选择：{{array[index]}}
+			</view>
+		</picker>
 
 		<view class="user-picker" wx:if="{{index === '2'}}">
 			<block wx:if="{{hasUser === false}}">	
@@ -23,11 +23,46 @@
 				<button size="mini" plain="true" bindtap="resetTarget">重置</button>
 			</block>
 		</view>
+
 		<mp-uploader
 			class="picker"
 			bindfail="uploadError"
 			bindsuccess="uploadSuccess"
 			upload="{{uplaodFile}}" files="{{files}}" max-count="1" title="图片上传" />
+
+		<text>语音信息</text>
+		<view class="recorder">
+			<block wx:if="{{recordPath === null}}">
+				<!-- <view class="recorder-start">
+					<image src=""></image>
+				</view> -->
+				<view  wx:if="{{recording === false}}" bindtap="recordStart" class="recorder-previewer">
+					<view class="recorder-previewer-info">
+						<image src="../../assets/record.png"></image>
+						<text>点击录音，最长30s</text>
+					</view>
+				</view>
+				<view wx:else bindtap="recordStop" class="recorder-previewer recorder-stop">
+					<view class="recorder-previewer-info">
+						<image src="../../assets/stop.png"></image>
+						<text>录制中，点击结束</text>
+					</view>
+				</view>
+			</block>
+			<block wx:else>
+				<view class="recorder-previewer" bindtap="recordPlay">
+					<view class="recorder-previewer-info">
+						<image src="../../assets/voice.png"></image>
+						<text>点击预览 {{recorderDuration}} s </text>
+					</view>
+					
+					<image src="../../assets/close.png" bindtap="recordCancel"></image>
+				</view>
+			</block>
+		</view>
+
 	</view>
-	<button bindtap="submit" class="submit-btn" type="primary" disabled="{{content.length <= 0}}"> 提交 </button>
+	<button bindtap="submit" class="submit-btn" disabled="{{content.length <= 0 || (index === '2' && hasUser === false)}}">
+		<view class="custom-submit"> 提交 </view>
+	</button>
 </view>

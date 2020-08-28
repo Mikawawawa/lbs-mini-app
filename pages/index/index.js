@@ -25,6 +25,7 @@ Page({
     scale: 17,
     markers: [],
     map: {},
+    hold: false,
     setting: {
       skew: 0,
       rotate: 0,
@@ -32,7 +33,7 @@ Page({
       showScale: false,
       subKey: '',
       layerStyle: -1,
-      enableZoom: false,
+      enableZoom: true,
       enableScroll: true,
       enableRotate: false,
       showCompass: false,
@@ -45,44 +46,56 @@ Page({
   //事件处理函数
   onLoad: function () {
     const that = this
-    this.setData({
-      map: wx.createMapContext('myMap')
-    })
+    const map = wx.createMapContext('myMap')
+    this.setData({ map })
+    // this.init()
+    // setTimeout(() => {
+    //   map.moveToLocation()
 
+    // }, 1000)
+    // this.updateCurrent(true)
     // this.init()
   },
-  onHide: function() {
-    if(this.data.timer) {
+  onHide: function () {
+    if (this.data.timer) {
       clearInterval(this.data.timer)
     }
   },
-  onShow: function() {
+  onShow: function () {
+    console.log('onshow')
     const that = this
-    this.updateCurrent()
+    // this.updateCurrent(true)
     const timer = setInterval(() => {
       that.updateCurrent()
     }, 10000)
     this.setData({
       timer
     })
-    this.init()    
+    this.init()
   },
   init: function () {
     const that = this
-    this.data.map.moveToLocation()
-    this.updateCurrent()
+    // this.data.map.moveToLocation()
+    this.updateCurrent(true)
   },
   bindregionchange: function (e) {
-    if(e.type === 'begin') return
-    this.getEvents()
+    const that = this
+    console.log(e.type)
+    if (e.type === 'begin') return
+
+    that.getEvents()
+
   },
   bindmarkertap: function (e) {
-    if(app.globalData.accessable && this.data.enableTable[e.detail.markerId]) {
+    const target = this.data.markers.find(elem => elem.id === e.detail.markerId)
+    const [deltaLat, deltaLng] = [target.latitude - this.data.currentLat, target.longitude - this.data.currentLng]
+    // console.log(Math.max( deltaLng))
+    if (app.globalData.accessable && Math.max(111314 * deltaLng * Math.cos(this.data.currentLng + 0.5 * deltaLng), 110950 * deltaLat) < 5000) {
       setTimeout(() => {
         wx.setClipboardData({
-          data: e.detail.markerId
+          data: e.detail.markerId,
         })
-      }, 500)
+      }, 300)
       console.log(e)
       wx.request({
         url: `${app.globalData.site}/mailbox/add`,
@@ -92,25 +105,37 @@ Page({
         },
         method: "POST"
       })
+    } else {
+      wx.showToast({
+        title: '请移动到该动态附近再试噢~',
+      })
     }
   },
-  getEvents: function() {
+  getEvents: function () {
+    console.log('here')
     const that = this
+    if (that.data.hold === true) return
+    that.setData({
+      hold: true
+    })
+    setTimeout(() => {
+      that.setData({ hold: false })
+    }, 1000)
     this.data.map.getRegion({
       success: (res) => {
         // region
         const latitude = [res.southwest.latitude]
         const longitude = [res.southwest.longitude]
-        if(res.northeast.latitude < res.southwest.latitude) 
+        if (res.northeast.latitude < res.southwest.latitude)
           latitude.unshift(res.northeast.latitude)
-        else 
+        else
           latitude.push(res.northeast.latitude)
 
-        if(res.northeast.longitude < res.southwest.longitude) 
+        if (res.northeast.longitude < res.southwest.longitude)
           longitude.unshift(res.northeast.longitude)
-        else 
+        else
           longitude.push(res.northeast.longitude)
-        const enableTitle = 
+        const enableTitle =
           (that.data.currentLat < latitude[1] && that.data.currentLat > latitude[0]) && (that.data.currentLng < longitude[1] && that.data.currentLng > longitude[0])
         // console.log(this.data.currentLat, this.data.currentLng)
         wx.request({
@@ -126,29 +151,39 @@ Page({
             const _markers = [...res.data.data.map(item => {
               enableTable[item.code] = enableTitle
               return {
-                  id: item.code,
-                  title: enableTitle && app.globalData.accessable ? `点击复制提取码：\n${item.code}` : '请移动到该动态附近再试哦~',
-                  latitude: item.lat,
-                  longitude: item.lng,
-                  enable: enableTitle
+                id: item.code,
+                // title: enableTitle && app.globalData.accessable ? `点击复制提取码：\n${item.code}` : '请移动到该动态附近再试哦~',
+                title: '点击尝试获取该动态',
+                latitude: item.lat,
+                longitude: item.lng,
+                enable: enableTitle
               }
             })]
             that.setData({
               markers: _markers,
-              enableTable: {...that.data.enableTable, ...enableTable}
+              enableTable: { ...that.data.enableTable, ...enableTable }
             })
           }
         })
       }
     })
   },
-  updateCurrent() {
+  updateCurrent(move) {
     const that = this
     wx.getLocation({
       type: 'gcj02',
       success(res) {
-        const {latitude, longitude} = res
-
+        const { latitude, longitude } = res
+        if (move === true) {
+          that.data.map.moveToLocation({
+            latitude,
+            longitude,
+          })
+          that.setData({
+            currentLat: latitude,
+            currentLng: longitude
+          })
+        }
         that.setData({
           currentLat: latitude,
           currentLng: longitude
@@ -180,5 +215,24 @@ Page({
         })
       }
     })
+  },
+  goMe: function () {
+    wx.navigateTo({
+      url: '../me/index'
+    })
+  },
+  goEditor: function () {
+    if (app.globalData.accessable) {
+      wx.navigateTo({
+        url: '../editor/index'
+      })
+    } else {
+      wx.showToast({
+        title: '亲，不在服务区不能发件哦',
+      })
+    }
+  },
+  refresh: function () {
+    this.data.map.moveToLocation()
   }
 })

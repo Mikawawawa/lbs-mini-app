@@ -1,0 +1,29 @@
+<!--index.wxml-->
+<view class="container main">
+	<text class="activity-title">我的动态</text>
+
+	<view class="activities" wx:if="{{activities && activities.length > 0}}">
+
+			<view wx:for="{{activities}}" wx:key="id" class="activity">
+			<view class="activity-header">
+				<view style="display: flex; flex-direction: column">
+					<text>{{item.createAt}}</text>
+				</view>
+				<view>
+					<text style="margin-left:8rpx" bindtap="deleIt" data-code="{{item.code}}">删除</text>
+				</view>
+			</view>
+			<view class="activity-content">
+				<text>{{item.content}}</text>
+			</view>
+			<view class="activity-images" wx:if="{{item.images !== undefined}}">
+				<image src="{{item.images}}" class="activity-image" mode="aspectFit"></image>
+			</view>
+			<view class="activity-header" style="margin-top: 24rpx">
+				<text wx:if="{{item.picked === true}}" class="picked">已提取</text>
+				<text class="topick" wx:if="{{item.picked === false}}">可提取</text>
+			</view>
+		</view>
+	</view>
+	<view class="empty" wx:else>空空如也呢</view>
+</view>

@@ -1,0 +1,35 @@
+/**index.wxss**/
+
+.userinfo {
+  width: 80vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: white;
+  margin-top: 50px;
+  border-radius: 20px;
+}
+
+.userDesc {
+  display: flex;
+  flex-direction: column;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.qrcode {
+  width: 80vw;
+  height: 80vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  margin-top: 50px;
+  border-radius: 20px;
+}

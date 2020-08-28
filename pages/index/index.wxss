@@ -3,3 +3,57 @@
   width: 100vw;
   height: 100vh;
 }
+
+.control-view {
+  pointer-events:none;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+
+.editor-btn {
+  position: absolute;
+  bottom: 40px;
+  width: 150px;
+  height: 50px;
+  border-radius: 150px;
+  margin: auto;
+
+  background-color: burlywood;
+
+  font-size: 32rpx;
+  color: white;
+  line-height: 50px;
+  text-align: center;
+}
+
+.control-btn {
+  width: 35px;
+  height: 35px;
+
+  background-color: white;
+  border-radius: 40px;
+  box-shadow:0 6rpx 10rpx 2rpx gray;/*for Android*/
+  -webkit-box-shadow:0px 3px 5px 1px gray;/*for IOS*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.me-btn {
+  top: 20px;
+  right: 10px;
+  position: absolute;
+}
+
+.me-btn-content {
+  width: 20px;
+  height: 20px;
+}
+
+.refresh-btn {
+  bottom: 50px;
+  right: 10px;
+  position: absolute;
+}

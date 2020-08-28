@@ -1,11 +1,13 @@
 {
   "pages": [
-    "pages/home/index",
     "pages/index/index",
+    "pages/home/index",
     "pages/me/index",
     "pages/editor/index",
     "pages/privilege/index",
-    "pages/mailbox/index"
+    "pages/mailbox/index",
+    "pages/activity/index",
+    "pages/qr/index"
   ],
   "permission": {
     "scope.userLocation": {
@@ -21,17 +23,5 @@
   "useExtendedLib": {
     "weui": true
   },
-  "sitemapLocation": "sitemap.json",
-  "tabBar": {
-    "list": [{
-      "pagePath": "pages/home/index",
-      "text": "动态"
-    }, {
-      "pagePath": "pages/index/index",
-      "text": "发现"
-    }, {
-      "pagePath": "pages/me/index",
-      "text": "我"
-    }]
-  }
+  "sitemapLocation": "sitemap.json"
 }

@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"postcss": true,
 		"preloadBackgroundData": false,
@@ -21,7 +21,8 @@
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
-		}
+		},
+		"bundle": true
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.11.0",
@@ -61,6 +62,34 @@
 					"id": -1,
 					"name": "pages/privilege/index",
 					"pathName": "pages/privilege/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/editor/index",
+					"pathName": "pages/editor/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/me/index",
+					"pathName": "pages/me/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/activity/index",
+					"pathName": "pages/activity/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/qr/index",
+					"pathName": "pages/qr/index",
 					"query": "",
 					"scene": null
 				},

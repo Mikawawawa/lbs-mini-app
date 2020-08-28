@@ -4,6 +4,8 @@ const app = getApp()
 
 Page({
   data: {
+    index: 0,
+    range: ['全体', '可提取', '已提取'],
     activities: [],
     userInfo: {},
     hasUserInfo: false,
@@ -16,56 +18,22 @@ Page({
     })
   },
   onLoad: function () {
-    
+    const that = this
+    this.setData({
+      idnumber: app.globalData.idnumber
+    })
+
   },
   onShow: function() {
-    this.init()
     this.getActivity()
   },
-  goMailBox: function(e) {
-    wx.navigateTo({
-      url: '../mailbox/index'
+  bindPickerChange: function(e) {
+    console.log(e)
+    this.setData({
+      ...this.data,
+      index: e.detail.value
     })
-  },
-  goActivity: function(e) {
-    wx.navigateTo({
-      url: '../activity/index'
-    })
-  },
-  init: function() {
-    const that = this
-    
-    if (app.globalData.userInfo) {
-      console.log(app.globalData)
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true,
-        idnumber: app.globalData.idnumber
-      })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true,
-          idnumber: app.globalData.idnumber
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            idnumber: app.globalData.idnumber,
-            hasUserInfo: true
-          })
-        }
-      })
-    }
-
+    this.getActivity()
   },
   getUserInfo: function(e) {
     app.globalData.userInfo = e.detail.userInfo
@@ -76,6 +44,7 @@ Page({
     this.getActivity()
   },
   deleIt: function(e) {
+    console.log(e)
     const that = this
     wx.request({
       url: `${app.globalData.site}/post/dele`,
@@ -103,7 +72,7 @@ Page({
             activities: res.data.data.map(item => ({
               createAt: new Date(item.createdAt).toLocaleString(),
               code: item.code,
-              images: JSON.parse(item.images),
+              images: JSON.parse(item.images).length > 0 ? JSON.parse(item.images)[0] : undefined,
               content: item.raw
             }))
           })

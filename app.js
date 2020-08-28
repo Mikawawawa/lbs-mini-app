@@ -2,6 +2,10 @@
 App({
   onLaunch: function () {
     // 登录
+ 
+    this.login()
+  },
+  login() {
     const that = this
     wx.login({
       success: res => {
@@ -44,10 +48,22 @@ App({
                           lng: longitude
                         },
                         success: function (res) {
+                          console.log(res)
+                          const ToastText = wx.getStorageSync('ToastText')
+                          if(ToastText !== res.data.ToastText) {
+                            wx.showModal({
+                              content: res.data.ToastText,
+                              showCancel: false,
+                              confirmText: '我知道啦'
+                            })
+                            wx.setStorageSync('ToastText', res.data.ToastText)
+                          }
                           // console.info('请求成功')
                           that.globalData.key = res.data.token
                           that.globalData.idnumber = res.data.idnumber
                           that.globalData.accessable = res.data.accessable || false
+                          // that.globalData.accessable = false
+                          
                           if(!that.globalData.accessable) {
                             wx.showToast({
                               title: '哎呀呀,不在服务区域哦',
@@ -58,6 +74,15 @@ App({
                       // that.getEvents()
                     }})
                 }
+              })
+
+              wx.startLocationUpdate({
+                success: (res) => {
+                  console.log(res)
+                },
+                complete: (res) => {
+                  console.log(res)
+                },
               })
             } else {
               wx.navigateTo({
@@ -71,14 +96,13 @@ App({
         console.log(res)
       }
     })
-
   },
   globalData: {
     userInfo: null,
     key: '',
     site: 'https://wechat.theohan.club',
     // site: 'http://129.204.241.109:8080',
-    // site: 'http://localhost:8080',
+    // site: 'http://192.168.1.105:8080',
     accessable: false
   }
 })
